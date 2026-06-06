@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>個人面談 自己評価シート</title>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600&family=Noto+Sans+JP:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #faf8f5;
+    --ink: #1c1917;
+    --mid: #6b6460;
+    --line: #e2ddd8;
+    --accent: #7c6355;
+    --accent2: #a08878;
+    --warm-white: #ffffff;
+    --highlight: #f0ebe5;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--bg);
+    font-family: 'Noto Sans JP', sans-serif;
+    color: var(--ink);
+    min-height: 100vh;
+  }
+
+  /* ===== COVER ===== */
+  .cover {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 60px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent), var(--accent2), transparent);
+  }
+  .cover-eyebrow {
+    font-size: 10px;
+    letter-spacing: 0.35em;
+    color: var(--accent2);
+    margin-bottom: 32px;
+    text-transform: uppercase;
+  }
+  .cover-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: clamp(28px, 7vw, 44px);
+    font-weight: 400;
+    line-height: 1.6;
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+  }
+  .cover-title span {
+    display: block;
+    font-size: 0.55em;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    color: var(--mid);
+    margin-top: 6px;
+  }
+  .cover-notice {
+    max-width: 400px;
+    border-left: 2px solid var(--accent);
+    padding: 12px 16px;
+    font-size: 12px;
+    line-height: 1.9;
+    color: var(--mid);
+    margin-bottom: 48px;
+    letter-spacing: 0.03em;
+  }
+  .cover-start {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    padding: 16px 36px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    cursor: pointer;
+    transition: background 0.2s;
+    border-radius: 1px;
+  }
+  .cover-start:hover { background: var(--accent); }
+  .cover-time {
+    margin-top: 16px;
+    font-size: 11px;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+  }
+  .cover-deco {
+    position: absolute;
+    right: -20px; bottom: -20px;
+    width: 200px; height: 200px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    opacity: 0.6;
+  }
+  .cover-deco2 {
+    position: absolute;
+    right: 40px; bottom: 40px;
+    width: 80px; height: 80px;
+    border: 1px solid var(--line);
+    border-radius: 50%;
+    opacity: 0.4;
+  }
+
+  /* ===== FORM PAGES ===== */
+  .form-wrap { display: none; }
+  .form-wrap.active { display: block; }
+
+  /* Progress */
+  .sticky-progress {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 12px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .prog-bar {
+    flex: 1;
+    height: 2px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .prog-fill {
+    height: 100%;
+    background: var(--accent);
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+    width: 0%;
+  }
+  .prog-label {
+    font-size: 10px;
+    color: var(--mid);
+    letter-spacing: 0.1em;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* Page */
+  .page {
+    display: none;
+    padding: 40px 24px 80px;
+    max-width: 680px;
+    margin: 0 auto;
+    animation: fadeUp 0.4s ease both;
+  }
+  .page.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity:0; transform: translateY(20px); }
+    to { opacity:1; transform: translateY(0); }
+  }
+
+  /* Section header */
+  .page-header {
+    margin-bottom: 36px;
+  }
+  .page-num {
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    color: var(--accent2);
+    margin-bottom: 8px;
+  }
+  .page-title {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 20px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    line-height: 1.5;
+  }
+  .page-divider {
+    width: 40px;
+    height: 1px;
+    background: var(--accent);
+    margin-top: 14px;
+  }
+
+  /* Field */
+  .field { margin-bottom: 28px; }
+  .field-label {
+    display: block;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--mid);
+    margin-bottom: 8px;
+    text-transform: uppercase;
+  }
+  .field-req {
+    color: var(--accent);
+    margin-left: 4px;
+  }
+  .field-hint {
+    font-size: 11px;
+    color: var(--mid);
+    margin-top: 6px;
+    letter-spacing: 0.04em;
+    line-height: 1.7;
+  }
+  input[type=text], select, textarea {
+    width: 100%;
+    background: var(--warm-white);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 12px 14px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 14px;
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+    letter-spacing: 0.03em;
+  }
+  input[type=text]:focus, select:focus, textarea:focus {
+    border-color: var(--accent);
+  }
+  select { cursor: pointer; -webkit-appearance: none; }
+  textarea { resize: vertical; line-height: 1.9; min-height: 90px; }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .input-grid .span2 { grid-column: 1/-1; }
+
+  /* Stars */
+  .star-field { margin-bottom: 28px; }
+  .star-q {
+    font-size: 13px;
+    line-height: 1.8;
+    margin-bottom: 12px;
+    letter-spacing: 0.03em;
+  }
+  .star-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .star-ends {
+    font-size: 10px;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+    min-width: 48px;
+    flex-shrink: 0;
+  }
+  .star-ends.right { text-align: right; }
+  .stars {
+    display: flex;
+    gap: 6px;
+    flex: 1;
+    justify-content: center;
+  }
+  .s-btn {
+    width: 40px; height: 40px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 13px;
+    font-family: 'Shippori Mincho', serif;
+    color: var(--mid);
+    transition: all 0.15s;
+  }
+  .s-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .s-btn.on { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* Radio */
+  .radio-list { display: flex; flex-direction: column; gap: 8px; }
+  .r-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 12px 14px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    transition: all 0.15s;
+    font-size: 13px;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+  }
+  .r-item:hover { border-color: var(--accent2); }
+  .r-item.sel { border-color: var(--accent); background: var(--highlight); }
+  .r-dot {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .r-item.sel .r-dot { border-color: var(--accent); background: var(--accent); }
+  .r-item.sel .r-dot::after {
+    content: '';
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: white;
+  }
+
+  /* Checkbox grid */
+  .check-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .c-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    background: white;
+    cursor: pointer;
+    font-size: 12px;
+    letter-spacing: 0.03em;
+    transition: all 0.15s;
+  }
+  .c-item:hover { border-color: var(--accent2); }
+  .c-item.on { border-color: var(--accent); background: var(--highlight); }
+  .c-box {
+    width: 16px; height: 16px;
+    border: 1.5px solid var(--line);
+    border-radius: 3px;
+    flex-shrink: 0;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9px;
+  }
+  .c-item.on .c-box { background: var(--accent); border-color: var(--accent); color: white; }
+
+  /* Nav */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .btn-back {
+    background: none;
+    border: 1px solid var(--line);
+    padding: 12px 24px;
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--mid);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: all 0.2s;
+  }
+  .btn-back:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-next {
+    background: var(--ink);
+    border: none;
+    padding: 14px 36px;
+    font-family: 'Shippori Mincho', serif;
+    font-size: 13px;
+    letter-spacing: 0.2em;
+    color: var(--bg);
+    cursor: pointer;
+    border-radius: 2px;
+    transition: background 0.2s;
+  }
+  .btn-next:hover { background: var(--accent); }
+  .btn-next:disabled { opacity: 0.35; cursor: not-allowed; }
+
+  /* Thanks */
+  .thanks {
+    display: none;
+    min-height: 100vh;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 60px 40px;
+  }
+  .thanks.active { display: flex; }
+  .thanks-icon {
+    width: 48px; height: 48px;
+    border: 1px solid var(--accent);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+    margin-bottom: 28px;
+    animation: popIn 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+  }
+  @keyframes popIn {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .thanks h2 {
+    font-family: 'Shippori Mincho', serif;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .thanks p {
+    font-size: 13px;
+    line-height: 2;
+    color: var(--mid);
+    letter-spacing: 0.05em;
+    max-width: 380px;
+  }
+
+  @media(max-width:540px){
+    .cover { padding: 48px 24px; }
+    .input-grid { grid-template-columns: 1fr; }
+    .check-grid { grid-template-columns: 1fr; }
+    .stars { gap: 4px; }
+    .s-btn { width: 34px; height: 34px; font-size: 12px; }
+    .star-ends { min-width: 36px; font-size: 9px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== COVER ===== -->
+<div class="cover" id="cover">
+  <div class="cover-eyebrow">Staff Interview</div>
+  <div class="cover-title">
+    個人面談<br>自己評価シート
+    <span>Semi-Annual Self Evaluation</span>
+  </div>
+  <div class="cover-notice">
+    記入内容は給与・評価に直結しません。<br>
+    自分の気持ちを整理する場として、正直にお答えください。<br>
+    内容は面談担当者のみが確認します。
+  </div>
+  <button class="cover-start" onclick="startForm()">
+    はじめる →
+  </button>
+  <div class="cover-time">目安時間：約10分</div>
+  <div class="cover-deco"></div>
+  <div class="cover-deco2"></div>
+</div>
+
+<!-- ===== FORM ===== -->
+<div class="form-wrap" id="formWrap">
+  <div class="sticky-progress">
+    <div class="prog-bar"><div class="prog-fill" id="progFill"></div></div>
+    <div class="prog-label" id="progLabel">1 / 5</div>
+  </div>
+
+  <!-- Page 1: 基本情報 -->
+  <div class="page active" id="p1">
+    <div class="page-header">
+      <div class="page-num">SECTION 01</div>
+      <div class="page-title">基本情報</div>
+      <div class="page-divider"></div>
+    </div>
+
+    <div class="field">
+      <div class="input-grid">
+        <div>
+          <label class="field-label">氏名<span class="field-req">*</span></label>
+          <input type="text" id="f_name" placeholder="山田 花子" oninput="updateProg()">
+        </div>
+        <div>
+          <label class="field-label">サロン<span class="field-req">*</span></label>
+          <select id="f_salon" onchange="updateProg()">
+            <option value="">選択</option>
+            <option>Arbre et chimie</option>
+            <option>Choupinet by Arbre et chimie</option>
+            <option>Miroir EYELASH&BROW</option>
+            <option>Liora nail&eye</option>
+            <option>SHINCA三鷹</option>
+          </select>
+        </div>
+        <div>
+          <label class="field-label">職種<span class="field-req">*</span></label>
+          <select id="f_job" onchange="updateProg()">
+            <option value="">選択</option>
+            <option>美容師（ヘア）</option>
+            <option>ネイリスト</option>
+            <option>アイリスト</option>
+            <option>受付・アシスタント</option>
+            <option>複数職種兼任</option>
+          </select>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <div></div>
+      <button class="btn-next" onclick="goPage(2)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Page 2: パフォーマンス -->
+  <div class="page" id="p2">
+    <div class="page-header">
+      <div class="page-num">SECTION 02</div>
+      <div class="page-title">パフォーマンス自己評価</div>
+      <div class="page-divider"></div>
+    </div>
+
+    <div class="star-field">
+      <div class="star-q">技術力・仕上がりのクオリティ</div>
+      <div class="star-row">
+        <div class="star-ends">課題あり</div>
+        <div class="stars" id="r_skill"></div>
+        <div class="star-ends right">非常に高い</div>
+      </div>
+    </div>
+    <div class="star-field">
+      <div class="star-q">接客・お客様とのコミュニケーション</div>
+      <div class="star-row">
+        <div class="star-ends">課題あり</div>
+        <div class="stars" id="r_service"></div>
+        <div class="star-ends right">非常に高い</div>
+      </div>
+    </div>
+    <div class="star-field">
+      <div class="star-q">時間管理・業務効率</div>
+      <div class="star-row">
+        <div class="star-ends">課題あり</div>
+        <div class="stars" id="r_time"></div>
+        <div class="star-ends right">非常に高い</div>
+      </div>
+    </div>
+    <div class="star-field">
+      <div class="star-q">チームへの貢献・協調性</div>
+      <div class="star-row">
+        <div class="star-ends">課題あり</div>
+        <div class="stars" id="r_team"></div>
+        <div class="star-ends right">非常に高い</div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goPage(1)">← 戻る</button>
+      <button class="btn-next" onclick="goPage(3)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Page 3: モチベーション -->
+  <div class="page" id="p3">
+    <div class="page-header">
+      <div class="page-num">SECTION 03</div>
+      <div class="page-title">今の状態・気持ち</div>
+      <div class="page-divider"></div>
+    </div>
+
+    <div class="star-field">
+      <div class="star-q">仕事全体へのやりがい・満足度</div>
+      <div class="star-row">
+        <div class="star-ends">低い</div>
+        <div class="stars" id="r_motivation"></div>
+        <div class="star-ends right">高い</div>
+      </div>
+    </div>
+    <div class="star-field" style="margin-bottom:28px">
+      <div class="star-q">最近、仕事で感じている「しんどさ」の度合い</div>
+      <div class="star-row">
+        <div class="star-ends">余裕あり</div>
+        <div class="stars" id="r_stress"></div>
+        <div class="star-ends right">かなり辛い</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">今の職場・チームの雰囲気について</label>
+      <textarea id="f_atmosphere" placeholder="良いと感じること、気になること、何でも。" rows="3"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">最近、生活環境で変化はありましたか？（任意）</label>
+      <textarea id="f_life" placeholder="引越し、家族のこと、体調など。面談の参考にするだけで、評価には影響しません。" rows="3"></textarea>
+      <div class="field-hint">✦ 記入したくない場合は空欄で構いません</div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goPage(2)">← 戻る</button>
+      <button class="btn-next" onclick="goPage(4)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Page 4: 成長・キャリア -->
+  <div class="page" id="p4">
+    <div class="page-header">
+      <div class="page-num">SECTION 04</div>
+      <div class="page-title">成長・キャリア</div>
+      <div class="page-divider"></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">この半期で「一番うまくいった」と思うこと</label>
+      <textarea id="f_success" placeholder="技術的な成長、お客様の反応、チームでの取り組みなど" rows="3"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">「もっとこうしたかった」「次は改善したい」こと</label>
+      <textarea id="f_improve" placeholder="技術、接客、時間管理、業務フローなど" rows="3"></textarea>
+    </div>
+
+    <div class="field">
+      <label class="field-label">身につけたいスキル・挑戦したいこと（複数選択可）</label>
+      <div class="check-grid" id="skill_checks" style="margin-top:8px">
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>新技術・トレンド習得</div>
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>接客・カウンセリング</div>
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>後輩指導・育成</div>
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>マネジメント・リーダー</div>
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>SNS・集客スキル</div>
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>業務効率化</div>
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>検定・資格取得</div>
+        <div class="c-item" onclick="toggleC(this)"><div class="c-box"></div>その他</div>
+      </div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">1年後のイメージ・なりたい方向</label>
+      <div class="radio-list" id="career_r">
+        <div class="r-item" onclick="selR('career_r',this)"><div class="r-dot"></div>今の仕事をもっと深く極めたい</div>
+        <div class="r-item" onclick="selR('career_r',this)"><div class="r-dot"></div>後輩育成・教育に携わりたい</div>
+        <div class="r-item" onclick="selR('career_r',this)"><div class="r-dot"></div>チーフ・リーダーなど役職に挑戦したい</div>
+        <div class="r-item" onclick="selR('career_r',this)"><div class="r-dot"></div>別の職種・サロン・働き方に関心がある</div>
+        <div class="r-item" onclick="selR('career_r',this)"><div class="r-dot"></div>まだはっきりしていない・考え中</div>
+      </div>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goPage(3)">← 戻る</button>
+      <button class="btn-next" onclick="goPage(5)">次へ →</button>
+    </div>
+  </div>
+
+  <!-- Page 5: 会社へのメッセージ -->
+  <div class="page" id="p5">
+    <div class="page-header">
+      <div class="page-num">SECTION 05</div>
+      <div class="page-title">会社へのメッセージ</div>
+      <div class="page-divider"></div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">サロンや会社に「変えてほしい」「こうなったら働きやすい」こと</label>
+      <textarea id="f_request" placeholder="シフト、設備、ルール、コミュニケーション方法など。言いにくいことこそ正直に。" rows="3"></textarea>
+      <div class="field-hint">✦ 評価に影響しません。改善のための大切な声として受け取ります。</div>
+    </div>
+
+    <div class="field">
+      <label class="field-label">今日の面談で「特に話したいこと・相談したいこと」</label>
+      <textarea id="f_agenda" placeholder="キャリア、人間関係、技術的な悩み、プライベートの変化なども歓迎。" rows="3"></textarea>
+    </div>
+
+    <div class="nav-row">
+      <button class="btn-back" onclick="goPage(4)">← 戻る</button>
+      <button class="btn-next" onclick="submitForm()">提出する →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== THANKS ===== -->
+<div class="thanks" id="thanks">
+  <div class="thanks-icon">✓</div>
+  <h2>提出が完了しました</h2>
+  <p>
+    回答をありがとうございます。<br>
+    内容は面談担当者が確認します。<br><br>
+    面談当日、率直にお話しできることを<br>楽しみにしています。
+  </p>
+</div>
+
+<script>
+// ===== State =====
+let currentPage = 1;
+const ratings = {};
+
+// ===== Init stars =====
+const starDefs = [
+  { id:'r_skill' }, { id:'r_service' }, { id:'r_time' }, { id:'r_team' },
+  { id:'r_motivation' }, { id:'r_stress' }
+];
+starDefs.forEach(({ id }) => {
+  ratings[id] = 0;
+  const el = document.getElementById(id);
+  [1,2,3,4,5].forEach(n => {
+    const b = document.createElement('button');
+    b.className = 's-btn';
+    b.textContent = n;
+    b.dataset.v = n;
+    b.onclick = () => {
+      ratings[id] = n;
+      el.querySelectorAll('.s-btn').forEach(x => x.classList.toggle('on', +x.dataset.v <= n));
+      updateProg();
+    };
+    el.appendChild(b);
+  });
+});
+
+// ===== Radio =====
+function selR(groupId, el) {
+  document.querySelectorAll(`#${groupId} .r-item`).forEach(i => i.classList.remove('sel'));
+  el.classList.add('sel');
+}
+
+// ===== Checkbox =====
+function toggleC(el) {
+  el.classList.toggle('on');
+  el.querySelector('.c-box').textContent = el.classList.contains('on') ? '✓' : '';
+}
+
+// ===== Progress =====
+function updateProg() {
+  const fill = document.getElementById('progFill');
+  const label = document.getElementById('progLabel');
+  fill.style.width = ((currentPage - 1) / 5 * 100) + '%';
+  label.textContent = currentPage + ' / 5';
+}
+
+// ===== Navigation =====
+function startForm() {
+  document.getElementById('cover').style.display = 'none';
+  document.getElementById('formWrap').classList.add('active');
+  updateProg();
+}
+
+function goPage(n) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById('p' + n).classList.add('active');
+  currentPage = n;
+  updateProg();
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ===== Collect =====
+function collectAll() {
+  const checks = Array.from(document.querySelectorAll('#skill_checks .c-item.on'))
+    .map(e => e.textContent.trim());
+  const career = document.querySelector('#career_r .sel')?.textContent.trim() || '';
+  return {
+    meta: {
+      submittedAt: new Date().toISOString(),
+      name: document.getElementById('f_name').value,
+      salon: document.getElementById('f_salon').value,
+      job: document.getElementById('f_job').value,
+    },
+    performance: {
+      skill: ratings['r_skill'],
+      service: ratings['r_service'],
+      timeManagement: ratings['r_time'],
+      teamwork: ratings['r_team'],
+    },
+    condition: {
+      motivation: ratings['r_motivation'],
+      stress: ratings['r_stress'],
+      atmosphereComment: document.getElementById('f_atmosphere').value,
+      lifeChange: document.getElementById('f_life').value,
+    },
+    growth: {
+      success: document.getElementById('f_success').value,
+      improve: document.getElementById('f_improve').value,
+      skillsWanted: checks,
+      careerDirection: career,
+    },
+    message: {
+      request: document.getElementById('f_request').value,
+      agendaRequest: document.getElementById('f_agenda').value,
+    }
+  };
+}
+
+// ===== GAS Web App URL =====
+// ★デプロイ後にURLをここに貼り付けてください
+const GAS_URL = "★ここにGAS Web AppのURLを貼り付け★";
+
+// ===== Submit =====
+async function submitForm() {
+  const data = collectAll();
+
+  // 送信ボタンを無効化
+  const btn = document.querySelector('#p5 .btn-next');
+  btn.disabled = true;
+  btn.textContent = '送信中...';
+
+  try {
+    await fetch(GAS_URL, {
+      method: 'POST',
+      mode: 'no-cors', // GASのCORS制限を回避
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data)
+    });
+  } catch(e) {
+    // no-corsモードでは常にopaqueレスポンスのためエラーは無視
+  }
+
+  // 送信完了 → サンクス画面へ
+  document.getElementById('formWrap').classList.remove('active');
+  document.getElementById('thanks').classList.add('active');
+  window.scrollTo({ top: 0 });
+}
+</script>
+</body>
+</html>
